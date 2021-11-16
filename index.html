@@ -35,7 +35,7 @@
     <span id="hits"></span>
     <!-- classをpaginationにし、list.jsのページネーションに -->
     <div class="form-group">
-      <ul>
+      <ul  class="pagination">
       <!-- <div style="display:none;"> -->
         <li id="list-item">
           <p class="horizon"></p>
@@ -50,7 +50,6 @@
           </dl>
         </li>
       </ul>
-    <ul class="pagination paginationA"></ul>
     </div>
 
     <ul class="list list-unstyled">
@@ -88,7 +87,7 @@
         // ページネーション指定 pageはページごとの表示件数
         page: 20,
         pagination: {
-          paginationClass: 'paginationA',
+          paginationClass: 'pagination',
           innerWindow: 4,
           outerWindow: 1,
           item: "<li class='page-item'><a class='page page-link' href='#'></a></li>",
