@@ -1,3 +1,4 @@
+/*
 ul.pagination li {
     /*  bootstrapのlist-inlineを使えば不要
     display: inline-block;
@@ -7,6 +8,7 @@ ul.pagination li {
     margin: 0 0 0 1em;
     padding: 1;
 }
+*/
 /*  bootstrapのlist-unstyledを使えば不要
 ul {
     list-style: none;
