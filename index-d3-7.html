@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>かんたんデジタルアーカイブキット</title>
+
+    <!-- ナビゲーションバーの固定(nav.fixed-top)のためにbodyの位置を調整する -->
+    <style>
+        body {
+            min-height: 75rem;
+            padding-top: 4.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- List.jsの呼び出し。idは末尾のスクリプトで指定する -->
+    <div id="myList">
+
+        <!-- ナビゲーションバー -->
+        <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark" aria-label="Third navbar example">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">かんたんデジタルアーカイブキット</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarsExample03">
+                    <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                    </ul>
+                    <form>
+                        <input class="search form-control" type="text" placeholder="Search" aria-label="Search">
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container">
+            <div class="bg-light p-5 rounded">
+                <ul class="pagination"></ul>
+                <ul class="list list-unstyled"></ul>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.fuzzysearch.js/0.1.0/list.fuzzysearch.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        // 入力ファイルの指定
+        const input = "cat10000.tsv";
+        // D3.jsでの入力ファイルの読み込みとList.jsの設定
+        d3.tsv(input).then(function (data) {
+            // fuzzy searchの設定
+            var fuzzyOptions = {
+                searchClass: "fuzzy-search",
+                location: 0,
+                distance: 100,
+                threshold: 0.4,
+                multiSearch: true
+            };
+            // List.jsのパラメータ
+            var options = {
+                // アイテムのテンプレート
+                item: function (data) {
+                    return `
+            <li>
+              <dl>
+                <dt class="title">${data.title}</dt>
+                <dd class="creator">${data.creator}</dd>
+                <dd class="publisher">${data.publisher}</dd>
+                <dd class="edition"><${data.edition}/dd>
+                <dd class="publicationDate">${data.publicationDate}</dd>
+                <dd class="note">${data.note}</dd>
+                <dd><a class="ncid" href="https://ci.nii.ac.jp/ncid/${data.ncid}" target="_blank">${data.ncid}</a></dd>
+              </dl>
+            </li>
+          `;
+                },
+                // fuzzy search
+                plugins: [
+                    ListFuzzySearch(fuzzyOptions)
+                ],
+                searchDelay: 750,
+                page: 20, // ページごとの表示件数
+                // ページネーション設定
+                pagination: {
+                    innerWindow: 2,
+                    outerWindow: 1,
+                    // ページネーションの表示をBootstrapに合わせるためのテンプレート
+                    item: '<li class="page-item"><a class="page page-link" href="#"></a></li>',
+                }
+            };
+            // List.jsの対象となるidの指定
+            var myList = new List('myList', options, data);
+        }).catch(function (error) {
+            // error
+        });
+    </script>
+
+</body>
+
+</html>
